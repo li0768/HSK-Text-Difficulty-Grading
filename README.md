@@ -1,100 +1,96 @@
-# Model Training Guide
+HSK Level Classification Model
+This repository contains the code and resources for training a HSK (Hanyu Shuiping Kaoshi) level classification model.
 
-## 📋 Prerequisites
-- Python 3.8 or higher
-- Required packages (install via pip):
+Prerequisites
+Python 3.7+
 
-```bash
-pip install torch transformers numpy pandas scikit-learn
-```
+PyTorch 1.8+
 
-## 🚀 Quick Start
+Required Python packages (install via pip install -r requirements.txt if available)
 
-### Step 1: Prepare Dataset
-1. Download the `Supplementary File (Dataset).zip` file
-2. Extract the archive to a convenient location (e.g., Desktop)
-3. The extracted folder structure will be:
-   ```
-   Supplementary File (Dataset).zip\
-   └── 李思卫五套教材（分级后教材_已过滤）\
-       └── 所属难度范围（初级（1-3级），中级（4-6级），高级（7-9级））\
-           ├── 初级（1-3级）\
-           │   ├── 1级\
-           │   ├── 2级\
-           │   └── 3级\
-           │       └── 新标准中文 初级中文3\
-           │           ├── lesson1.txt
-           │           ├── lesson2.txt
-           │           └── ...
-           ├── 中级（4-6级）\
-           └── 高级（7-9级）\
-   ```
+Quick Start Guide
+Step 1: Download Files
+Download the following two zip files to your Desktop:
 
-### Step 2: Place Training Script
-Locate the `HSK Level model.py` file in the `Training Model Files` folder and copy it to your working directory (e.g., Desktop).
+数据集（8：1：1划分训练集，测试集，验证集）.zip - Contains pre-split dataset (8:1:1 ratio for train/test/validation)
 
-### Step 3: Configure Paths (Important!)
-Before running the script, you may need to update the dataset path inside `HSK Level model.py` to match your extraction location. For example:
+Supplementary File (Training Model Files).zip - Contains model training files
 
-```python
-# Update this line in the script if necessary
-dataset_path = "C:/Users/YourUsername/Desktop/Supplementary File (Dataset)/李思卫五套教材（分级后教材_已过滤）"
-```
+Step 2: Extract Files
+Extract both zip files on your Desktop.
 
-### Step 4: Run Training Script
-Open Command Prompt (cmd) and navigate to your working directory:
+Step 3: Prepare Training Script
+Move HSK Level model.py from the extracted Supplementary File (Training Model Files) folder to your Desktop.
 
-```bash
-cd Desktop
+Step 4: Start Training
+Open Command Prompt (cmd)
+
+Navigate to your Desktop:
+
+bash
+cd %USERPROFILE%\Desktop
+Run the training script:
+
+bash
 python "HSK Level model.py"
-```
-
-### Step 5: Expected Output
-After successful execution, the following files will be generated in your working directory:
-- `best_optimized_model.pth` (model weights)
-- `best_optimized_model_tokenizer.pkl` (tokenizer)
-
-## 📁 Recommended Project Structure
-```
+File Structure
+text
 Desktop/
-├── Supplementary File (Dataset)/
-│   └── 李思卫五套教材（分级后教材_已过滤）/
-│       └── 所属难度范围（初级（1-3级），中级（4-6级），高级（7-9级））/
-│           ├── 初级（1-3级）/
-│           ├── 中级（4-6级）/
-│           └── 高级（7-9级）/
-├── HSK Level model.py
-├── best_optimized_model.pth (generated after training)
-└── best_optimized_model_tokenizer.pkl (generated after training)
-```
+├── 数据集（8：1：1划分训练集，测试集，验证集）/
+│   ├── train/
+│   ├── test/
+│   └── validation/
+├── Supplementary File (Training Model Files)/
+│   ├── HSK Level model.py (move to Desktop)
+│   ├── *.pth (trained model weights)
+│   └── *.ptl (model-related files)
+└── HSK Level model.py
+Model Files
+The Supplementary File (Training Model Files).zip contains:
 
-## ⚠️ Important Notes
-1. **Path Considerations**: The script expects Chinese folder names. If you encounter encoding issues:
-   - Keep original Chinese folder names
-   - Or modify the script's path variables accordingly
+HSK Level model.py - Main training script
 
-2. **Dataset Structure**: The training script should automatically traverse through:
-   - Difficulty levels (Beginner/Intermediate/Advanced)
-   - Specific HSK levels (1-9)
-   - Textbook folders
-   - Individual lesson `.txt` files
+.pth files - PyTorch model weights (best model after training)
 
-3. **File Encoding**: Ensure text files are UTF-8 encoded to avoid reading errors
+.ptl files - Additional model configuration files
 
-## ❓ Troubleshooting
-| Issue | Solution |
-|-------|----------|
-| FileNotFoundError | Verify the dataset path in the script matches your extraction location |
-| Encoding errors | Check that all `.txt` files are UTF-8 encoded |
-| ModuleNotFoundError | Install required packages using `pip install -r requirements.txt` (if available) |
-| Memory issues | Reduce batch size in the training script if using limited RAM |
+Training Process
+When you run HSK Level model.py, the script will:
 
-## 📝 Example Path
-For a typical installation on Windows:
-```
-C:\Users\[YourUsername]\Desktop\Supplementary File (Dataset)\李思卫五套教材（分级后教材_已过滤）\所属难度范围（初级（1-3级），中级（4-6级），高级（7-9级））\初级（1-3级）\3级\新标准中文 初级中文3\lesson1.txt
-```
+Load the dataset from the extracted folder
 
----
+Initialize the model architecture
 
-**Note**: The training script should handle the nested folder structure automatically. If you encounter path-related errors, check the directory structure matches the example above.
+Train using the 8:1:1 split dataset
+
+Save the best model as .pth and .ptl files
+
+Output training progress and evaluation metrics
+
+Expected Output
+After successful training, you should see:
+
+Training loss and accuracy metrics
+
+Validation/test set performance
+
+Model files saved in the current directory
+
+Troubleshooting
+File not found errors: Ensure all files are extracted to the correct locations on your Desktop
+
+Python/pip not recognized: Add Python to your system PATH or use absolute path to Python executable
+
+Missing dependencies: Install required packages manually:
+
+bash
+pip install torch torchvision
+Notes
+The .pth and .ptl files are generated automatically after training completes
+
+Training time may vary depending on your hardware configuration
+
+For best results, ensure you have sufficient disk space and memory
+
+Support
+For issues or questions, please check the repository's issue tracker or contact the maintainer.
