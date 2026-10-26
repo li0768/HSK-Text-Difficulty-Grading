@@ -1,0 +1,81 @@
+{
+  "composition": {
+    "DHNN_seed": 2024,
+    "RoBERTa_seed": 2024,
+    "n_models": 2,
+    "fusion": "probability_average"
+  },
+  "n_samples": 463,
+  "DHNN_accuracy": 0.8768898488120951,
+  "DHNN_f1_weighted": 0.8756702927906151,
+  "RoBERTa_accuracy": 0.9157667386609071,
+  "RoBERTa_f1_weighted": 0.9133831711948832,
+  "ensemble_accuracy": 0.9157667386609071,
+  "ensemble_f1_weighted": 0.913175805518493,
+  "ensemble_f1_macro": 0.871953975160131,
+  "confusion_matrix": [
+    [
+      54,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      2,
+      69,
+      2,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      8,
+      97,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      3,
+      76,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      5,
+      95,
+      2,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      10,
+      27,
+      1
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      4,
+      2,
+      6
+    ]
+  ]
+}

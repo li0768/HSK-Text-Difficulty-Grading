@@ -1,0 +1,81 @@
+{
+  "composition": {
+    "DHNN_seed": 123,
+    "RoBERTa_seed": 123,
+    "n_models": 2,
+    "fusion": "probability_average"
+  },
+  "n_samples": 463,
+  "DHNN_accuracy": 0.8855291576673866,
+  "DHNN_f1_weighted": 0.8855427107168139,
+  "RoBERTa_accuracy": 0.9244060475161987,
+  "RoBERTa_f1_weighted": 0.9244658041838039,
+  "ensemble_accuracy": 0.9287257019438445,
+  "ensemble_f1_weighted": 0.928727728530184,
+  "ensemble_f1_macro": 0.903131079459716,
+  "confusion_matrix": [
+    [
+      53,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      4,
+      67,
+      2,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      5,
+      97,
+      2,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      78,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      2,
+      94,
+      6,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      4,
+      32,
+      2
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      2,
+      9
+    ]
+  ]
+}

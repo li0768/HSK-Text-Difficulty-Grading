@@ -1,158 +1,70 @@
-# HSK Level Classification Model
+# HSK Text Grading Based on Deep Hybrid Neural Network and RoBERTa
 
-## 📋 Prerequisites
-- **Python 3.8+** (Recommended: Python 3.8-3.11)
-- **Required Packages**:
-  ```bash
-  pip install torch torchvision torchaudio
-  pip install numpy pandas scikit-learn
-  pip install matplotlib tqdm
-  ```
+This repository contains the official PyTorch implementation for the paper: **"Research on HSK Chinese Text Grading Based on Deep Hybrid Neural Network Models"**. 
 
-## 🚀 Quick Start
+The proposed model is a Deep Hybrid Neural Network that classifies Chinese texts into seven HSK difficulty levels. It integrates character-level local features (Multi-scale CNN + BiLSTM + Multi-head Attention) with contextual semantic features (fine-tuned Chinese RoBERTa-wwm-ext). These heterogeneous features are concatenated (3,840 dimensions) and mapped into a unified manifold for final classification.
 
-### Step 1: Download Files
-Download the following two zip files directly to your **Desktop**:
-1. **数据集（8：1：1划分训练集，测试集，验证集）.zip** - Pre-split dataset (8:1:1 train/test/validation ratio)
-2. **Supplementary File (Training Model Files).zip** - Training scripts and model templates
+## 📊 Main Results
 
-### Step 2: Extract Files
-Extract both zip files on your Desktop. The structure should be:
-```
-Desktop/
-├── 数据集（8：1：1划分训练集，测试集，验证集）/
-│   ├── train/          # Training data (80%)
-│   ├── test/           # Testing data (10%)
-│   └── validation/     # Validation data (10%)
-└── Supplementary File (Training Model Files)/
-    ├── HSK Level model.py
-    ├── *.pth           # Model template files
-    └── *.ptl           # Configuration files
-```
+Under a strictly source-stratified split (Train/Val/Test = 3,649/454/463), the proposed hybrid model achieves:
+*   **Test Accuracy:** 92.87% (Main Seed 123)
+*   **Weighted F1-score:** 92.87% (Main Seed 123)
+*   **Three-Seed Stability:** 92.22% ± 0.65% (Seeds 42, 123, 2024)
 
-### Step 3: Prepare Training Script
-Locate `HSK Level model.py` inside the `Supplementary File (Training Model Files)` folder and **move it to your Desktop**.
+## 📂 Repository Structure
 
-### Step 4: Start Training
-1. **Open Command Prompt (cmd)**
-2. **Navigate to Desktop**:
-   ```bash
-   cd %USERPROFILE%\Desktop
-   ```
-3. **Execute Training Script**:
-   ```bash
-   python "HSK Level model.py"
-   ```
+```text
+├── experiments/            # Training, baseline, and ablation scripts
+│   ├── run_main.py             # Main training for the DHNN components
+│   ├── run_roberta.py          # Fine-tuning script for RoBERTa
+│   ├── run_bert_baseline.py    # BERT baseline training
+│   ├── run_kgmnn.py            # KGMNN baseline training
+│   └── run_ablation.py         # Ablation studies (-CNN, -BiLSTM, etc.)
+├── models/                 # PyTorch model architectures (DHNN, etc.)
+├── utils/                  # Data loaders (split_by_source), metrics, and helpers
+└── README.md
+🛠️ Environment Setup
+All experiments were conducted on a CPU-only environment (AMD Ryzen 7 4800U, 32GB RAM). GPU acceleration is supported and will significantly speed up the RoBERTa fine-tuning.
 
-## 📁 Project Structure
-```
-Desktop/
-├── 数据集（8：1：1划分训练集，测试集，验证集）/  # Extracted dataset
-│   ├── train/              # 80% of total data
-│   │   ├── class1/
-│   │   ├── class2/
-│   │   └── ...
-│   ├── test/               # 10% of total data
-│   └── validation/         # 10% of total data
-├── Supplementary File (Training Model Files)/  # Original files (optional)
-│   ├── HSK Level model.py
-│   ├── *.pth
-│   └── *.ptl
-├── HSK Level model.py      # Moved here for execution
-├── best_model.pth          # Generated after training
-└── model_checkpoint.ptl    # Generated after training
-```
+Clone this repository:
 
-## ⚙️ Automatic Configuration
-The training script is pre-configured to:
-- **Automatically detect** the dataset folder on Desktop
-- **Load data** with 8:1:1 split already applied
-- **Save best model** to Desktop after training
-- **Generate training logs** in console
+bash
+git clone https://github.com/li0768/HSK-Text-Difficulty-Grading.git
+cd HSK-Text-Difficulty-Grading
+Install dependencies:
 
-## 📊 Expected Training Process
-When you run the script, you will see:
-```
-[INFO] Loading dataset from: C:\Users\YourName\Desktop\数据集（8：1：1划分训练集，测试集，验证集）
-[INFO] Found X training samples, Y validation samples, Z test samples
-[INFO] Starting training...
-[Epoch 1/10] Loss: X.XXXX, Accuracy: XX.XX%
-[Epoch 2/10] Loss: X.XXXX, Accuracy: XX.XX%
-...
-[INFO] Training completed!
-[INFO] Best model saved to Desktop
-```
+bash
+pip install -r requirements.txt
+🚀 Reproduction Guide
+Due to copyright restrictions on the raw textbook content, the raw texts are not included. However, the complete data split logic (split_by_source), preprocessing, and training scripts are provided.
 
-## ⚠️ Important Notes
-1. **No Path Configuration Needed**: The script automatically searches for dataset on Desktop
-2. **Model Files**: 
-   - `.pth` files contain trained model weights
-   - `.ptl` files contain model architecture and configurations
-3. **Training Time**: Depends on dataset size, typically 10-30 minutes
-4. **Storage**: Ensure Desktop has at least 2GB free space for generated files
+Before running the scripts, ensure the BASE_PATH in the experiment files points to your local dataset directory.
 
-## 🔍 Troubleshooting Guide
+Step 1: Train the main DHNN components
+bash
+python experiments/run_main.py
+Step 2: Fine-tune the RoBERTa encoder
+bash
+python experiments/run_roberta.py
+(Note: If you are in mainland China, set the mirror before running: set HF_ENDPOINT=https://hf-mirror.com)
 
-| Problem | Solution |
-|---------|----------|
-| **File Not Found** | Ensure both zip files are extracted directly on Desktop |
-| **Python Not Recognized** | Add Python to PATH or use full path: `C:\Python39\python.exe "HSK Level model.py"` |
-| **Missing Packages** | Run: `pip install torch numpy pandas scikit-learn` |
-| **Permission Error** | Run Command Prompt as Administrator |
-| **Out of Memory** | Reduce batch size in script (if configurable) |
+Step 3: Feature Fusion & Evaluation
+Ensure you have the prediction JSON files from Step 1 and Step 2. You can use the provided fusion script (if available) or perform probability averaging to reproduce the final 92.87% metric.
 
-## 📈 Output Files Explanation
-After successful training, these files will appear on your Desktop:
+Step 4: Run Baselines & Ablation Studies
+bash
+python experiments/run_bert_baseline.py
+python experiments/run_kgmnn.py
+python experiments/run_ablation.py
+📝 Citation
+If you find this code useful in your research, please consider citing our paper:
 
-1. **best_model.pth** 
-   - Contains the trained model weights
-   - Can be loaded for inference or further training
-   - File size: ~100-500MB
-
-2. **model_checkpoint.ptl**
-   - Contains model architecture and training configuration
-   - Includes optimizer state and hyperparameters
-   - Essential for resuming training
-
-3. **Training Logs** (in console)
-   - Epoch-wise loss and accuracy
-   - Validation performance
-   - Final test set evaluation
-
-## 💡 Pro Tips
-1. **Monitor Training**: Watch the loss values decreasing each epoch
-2. **Verify Output**: Check that `.pth` and `.ptl` files are created after training
-3. **Backup Models**: Copy generated files to a safe location
-4. **Clean Up**: Remove original zip files after extraction to save space
-
-## ✅ Quick Verification
-To verify everything is set up correctly:
-
-1. **Check Desktop contents**:
-   ```
-   Desktop/
-   ├── 数据集（8：1：1划分训练集，测试集，验证集）/ (folder)
-   ├── Supplementary File (Training Model Files)/ (folder)
-   └── HSK Level model.py (file)
-   ```
-
-2. **Run quick test**:
-   ```bash
-   python --version  # Should show Python 3.8+
-   python -c "import torch; print(torch.__version__)"  # Should print version
-   ```
-
-## 🆘 Need Help?
-If the script doesn't run:
-1. **Check Step 3**: Ensure `HSK Level model.py` is on Desktop (not inside any folder)
-2. **Check Extraction**: Both zip files must be extracted (not just copied)
-3. **Check Python**: Type `python` in cmd to verify it's installed
-4. **Check Dependencies**: Install all required packages from Prerequisites section
-
----
-**Model Version**: 1.0  
-**Last Updated**: January 2024  
-**Dataset Split**: 8:1:1 (Train:Test:Validation)  
-**Compatibility**: Windows 10/11, Python 3.8+
-
-*For issues, ensure you've followed all steps exactly as described above.*
+bibtex
+@article{li2024hsktxt,
+  title={Research on HSK Chinese Text Grading Based on Deep Hybrid Neural Network Models},
+  author={Li, Siwei and Liu, Hua},
+  journal={[Journal Name]},
+  year={2024}
+}
+📄 License
+This project is licensed under the MIT License. The raw copyrighted textbook content is not covered by this license and must be obtained through legal channels.
